@@ -1,87 +1,91 @@
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Restaurant {
-    private String name;
-    private String location;
-    public LocalTime openingTime;
-    public LocalTime closingTime;
-    private List<Item> menu = new ArrayList<Item>();
+	private String name;
+	private String location;
+	public LocalTime openingTime;
+	public LocalTime closingTime;
+	private List<Item> menu = new ArrayList<Item>();
 
-    public Restaurant(String name, String location, LocalTime openingTime, LocalTime closingTime) {
-        this.name = name;
-        this.location = location;
-        this.openingTime = openingTime;
-        this.closingTime = closingTime;
-    }
-    
-    public LocalTime getCurrentTime() { 
-    	return  LocalTime.now(); 
-    }
+	public Restaurant(String name, String location, LocalTime openingTime, LocalTime closingTime) {
+		this.name = name;
+		this.location = location;
+		this.openingTime = openingTime;
+		this.closingTime = closingTime;
+		// default menu items
+		this.menu.add(new Item("Lemon Rice", 73));
+		this.menu.add(new Item("Sambar Rice", 45));
+	}
 
-    public LocalTime getOpeningTime() { 
-    	return openingTime; 
-    }
+	public LocalTime getCurrentTime() {
+		return LocalTime.now();
+	}
 
-    public void setOpeningTime(LocalTime openingTime) {
-        this.openingTime = openingTime;
-    }
-    
-    public LocalTime getClosingTime() {
-    	return closingTime;
-    }
+	public LocalTime getOpeningTime() {
+		return openingTime;
+	}
 
-    public void setClosingTime(LocalTime closingTime) {
-        this.closingTime = closingTime;
-    }
+	public void setOpeningTime(LocalTime openingTime) {
+		this.openingTime = openingTime;
+	}
 
-    public boolean isRestaurantOpen() {
-    	LocalTime time = LocalTime.now();
-        int isStillOpen = time.compareTo(closingTime);
-        int isOpen = time.compareTo(openingTime);
-        if(isStillOpen<0 && isOpen>=0){
-            return true;
-        }
-        return false;
-    }
+	public LocalTime getClosingTime() {
+		return closingTime;
+	}
 
-    public List<Item> getMenu() {
-        return this.menu;
-    }
+	public void setClosingTime(LocalTime closingTime) {
+		this.closingTime = closingTime;
+	}
 
-    private Item findItemByName(String itemName){
-        for(Item item: menu) {
-            if(item.getName().equals(itemName))
-                return item;
-        }
-        return null;
-    }
+	public boolean isRestaurantOpen() {
+		LocalTime time = LocalTime.now();
+		int isStillOpen = time.compareTo(closingTime);
+		int isOpen = time.compareTo(openingTime);
+		if (isStillOpen < 0 && isOpen >= 0) {
+			return true;
+		}
+		return false;
+	}
 
-    public void addToMenu(String name, int price) {
-        Item newItem = new Item(name,price);
-        menu.add(newItem);
-    }
-    
-    public void removeFromMenu(String itemName) throws itemNotFoundException {
+	public List<Item> getMenu() {
+		return this.menu;
+	}
 
-        Item itemToBeRemoved = findItemByName(itemName);
-        if (itemToBeRemoved == null)
-            throw new itemNotFoundException(itemName);
+	private Item findItemByName(String itemName) {
+		for (Item item : menu) {
+			if (item.getName().equals(itemName))
+				return item;
+		}
+		return null;
+	}
 
-        menu.remove(itemToBeRemoved);
-    }
-    public void displayDetails(){
-        System.out.println("Restaurant:"+ name + "\n"
-                +"Location:"+ location + "\n"
-                +"Opening time:"+ openingTime +"\n"
-                +"Closing time:"+ closingTime +"\n"
-                +"Menu:"+"\n"+getMenu());
+	public void addToMenu(String name, int price) {
+		Item newItem = new Item(name, price);
+		menu.add(newItem);
+	}
 
-    }
+	public void removeFromMenu(String itemName) throws itemNotFoundException {
 
-    public String getName() {
-        return name;
-    }
+		Item itemToBeRemoved = findItemByName(itemName);
+		if (itemToBeRemoved == null)
+			throw new itemNotFoundException(itemName);
 
+		menu.remove(itemToBeRemoved);
+	}
+
+	public void displayDetails() {
+		System.out.println("Restaurant:" + name + "\n" + "Location:" + location + "\n" + "Opening time:" + openingTime
+				+ "\n" + "Closing time:" + closingTime + "\n" + "Menu:" + "\n" + getMenu());
+
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getOrderValue(List<Item> item) {
+		int totalValue = 0;
+		for (Item myItem : item) {
+			totalValue += myItem.getPrice();
+		}
+		return totalValue;
+	}
 }
